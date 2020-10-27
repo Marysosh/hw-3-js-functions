@@ -9,12 +9,10 @@
 function splitAndMerge(string, separator) {
   var words = string.split(" ");
   var characters = [];
-  var result = '';
-  for (var i = 0; i < words.length; i++) {
-    characters[i] = words[i].split("").join(separator);
-  }
-  result = characters.join(" ");
-  return result;
+  characters = words.map(function(item){
+    return item.split("").join(separator);
+  });
+  return characters.join(" ");
 }
 
 /*
@@ -25,14 +23,12 @@ function splitAndMerge(string, separator) {
 
 */
 function convert(hash) {
-  var hash_array = [];
+  var hashArray = [];
   var i = 0;
   for (var key in hash) {
-    var temp_array = [key, hash[key]];
-    hash_array[i] = temp_array;
-    i++;
+    hashArray.push([key, hash[key]]);
   }
-  return hash_array;
+  return hashArray;
 }
 
 /*
@@ -43,17 +39,16 @@ function convert(hash) {
 
 */
 function toCamelCase(words) {
-  var words_array;
+  var wordsArray;
   if (words.indexOf("-") === -1) {
-    words_array = words.split("_");
+    wordsArray = words.split("_");
   } else {
-    words_array = words.split("-");
+    wordsArray = words.split("-");
   }
-  for (var i = 1; i < words_array.length; i++) {
-      words_array[i] = words_array[i][0].toUpperCase() + words_array[i].slice(1);
+  for (var i = 1; i < wordsArray.length; i++) {
+      wordsArray[i] = wordsArray[i][0].toUpperCase() + wordsArray[i].slice(1);
   }
-  var result = words_array.join("");
-  return result;
+  return wordsArray.join("");
 }
 
 /*
@@ -64,12 +59,11 @@ function toCamelCase(words) {
 
 */
 function wordReverse(string) {
-  var words_array = string.split(" ");
-  for (var i = 0; i < words_array.length; i++) {
-    words_array[i] = words_array[i].split("").reverse().join("");
-  }
-  var result = words_array.join(" ");
-  return result;
+  var wordsArray = string.split(" ");
+  wordsArray = wordsArray.map(function(item){
+    return item.split("").reverse().join("");
+  });
+  return wordsArray.join(" ");
 }
 
 /*
@@ -80,16 +74,16 @@ function wordReverse(string) {
 
 */
 function stringExpansion(string) {
-  var current_number = 1;
+  var currentNumber = 1;
   var result = "";
   for (var i = 0; i < string.length; i++) {
     if (!isNaN(Number(string[i]))) {
-      current_number = Number(string[i]);
+      currentNumber = Number(string[i]);
     } else {
-      for (var j = 0; j < current_number; j++) {
+      for (var j = 0; j < currentNumber; j++) {
         result += string[i];
       }
-      current_number = 1;
+      currentNumber = 1;
     }
   }
   return result;
@@ -103,15 +97,8 @@ function stringExpansion(string) {
 
 */
 function largest() {
-  var args = Array.from(arguments);
-  for (var i = 0; i < args.length; i++) {
-    args[i] = Number(args[i]);
-  }
-  var sorted_array = args.sort(function(a, b) {
-  return a - b;
-  });
-  var result = sorted_array[sorted_array.length-1];
-  return result
+  var args = Array.prototype.slice.call(arguments, 0);
+  return Math.max.apply(null, args);
 }
 
 /*
@@ -122,15 +109,8 @@ function largest() {
 
 */
 function smallest() {
-  var args = Array.from(arguments);
-  for (var i = 0; i < args.length; i++) {
-    args[i] = Number(args[i]);
-  }
-  var sorted_array = args.sort(function(a, b) {
-  return a - b;
-  });
-  var result = sorted_array[0];
-  return result
+  var args = Array.prototype.slice.call(arguments, 0);
+  return Math.min.apply(null, args);
 }
 
 /*
@@ -141,14 +121,9 @@ function smallest() {
 
 */
 function transform(baseArray) {
-  newArray = [];
-  function return_element(element) {
-    return element;
-  }
-  for (var i = 0; i<baseArray.length; i++) {
-    newArray[i] = return_element.bind(null, baseArray[i]);
-  }
-  return newArray;
+  return baseArray.map(function(item){
+    return function(){return item;}
+  });
 }
 
 /*
@@ -159,7 +134,7 @@ function transform(baseArray) {
 
 */
 function sum() {
-  var args = Array.from(arguments);
+  var args = Array.prototype.slice.call(arguments, 0);
   if (args.length=== 1) {
     return args[0];
   } else {
@@ -175,13 +150,13 @@ function sum() {
 
 */
 function countDown(number) {
-  var current_number = number;
+  var currentNumber = number;
   var timer = setInterval ( function() {
-    console.log(current_number);
-    if (current_number == 0) {
+    console.log(currentNumber);
+    if (currentNumber == 0) {
       clearInterval(timer);
     };
-    current_number--;
+    currentNumber--;
   }, 1000);
 }
 
@@ -193,11 +168,11 @@ function countDown(number) {
 
 */
 Function.prototype.myBind = function() {
-  var main_function = this;
+  var mainFunction = this;
   var context = arguments[0];
-  var args = Array.from(arguments).slice(1);
+  var args = Array.prototype.slice.call(arguments, 0).slice(1);
   return function() {
-    var main_function_args = args.concat(Array.from(arguments));
-    return main_function.apply(context, main_function_args);
+    var mainFunctionArgs = args.concat(Array.prototype.slice.call(arguments, 0));
+    return mainFunction.apply(context, mainFunctionArgs);
   };
 }
