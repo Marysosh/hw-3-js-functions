@@ -23,8 +23,6 @@ function splitAndMerge(string, separator) {
 
 */
 function convert(hash) {
-  var hashArray = [];
-  var i = 0;
   for (var key in hash) {
     hashArray.push([key, hash[key]]);
   }
@@ -135,8 +133,8 @@ function transform(baseArray) {
 */
 function sum() {
   var args = Array.prototype.slice.call(arguments, 0);
-  if (args.length=== 1) {
-    return args[0];
+  if (!args.length) {
+    return 0;
   } else {
     return args[0] + sum.apply(this, args.slice(1));
   }
